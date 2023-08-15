@@ -14,7 +14,7 @@ defineProps<{
         <text class="title-text">{{ item.title }}</text>
         <text class="title-desc">{{ item.alt }}</text>
       </view>
-      <navigator hover-class="none" url="/pages/hot/hot" class="cards">
+      <navigator hover-class="none" :url="`/pages/hot/hot?type=${item.type}`" class="cards">
         <image
           v-for="image in item.pictures"
           :key="image"
@@ -28,54 +28,6 @@ defineProps<{
 </template>
 
 <style scoped lang="scss">
-// .hot {
-//   display: flex;
-//   flex-wrap: wrap;
-//   min-height: 508rpx;
-//   margin: 20rpx 10rpx 0;
-//   background-color: #fff;
-//   border-radius: 10rpx;
-//   .item {
-//     display: flex;
-//     width: 50%;
-//     height: 254rpx;
-//     border-right: 1rpx solid #eee;
-//     border-top: 1rpx solid #eee;
-//     flex-direction: column;
-//     .title {
-//       display: flex;
-//       align-items: center;
-//       justify-content: start;
-//       padding: 24rpx 24rpx 0;
-//       color: #262626;
-//       position: relative;
-//       .title-text {
-//         font-size: 36rpx;
-//         margin-right: 18rpx;
-//       }
-//       .title-desc {
-//         font-size: 24rpx;
-//         color: #7f7f7f;
-//       }
-//     }
-//     &:nth-child(2n) {
-//       border-right: 0 none;
-//     }
-//     &:nth-child(-n + 2) {
-//       border-top: 0 none;
-//     }
-//     .cards {
-//       flex: 1;
-//       display: flex;
-//       justify-content: space-between;
-//       align-items: center;
-//       .image {
-//         width: 150rpx;
-//         height: 150rpx;
-//       }
-//     }
-//   }
-// }
 /* 热门推荐 */
 .hot {
   display: flex;

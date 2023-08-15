@@ -1,3 +1,5 @@
+import type { PageParams, PageResult } from '@/types/global'
+import type { GuessItem } from '@/types/home.d'
 import type { BannerItem, CategoryItem, HotItem } from '@/types/home'
 import { http } from '@/utils/http'
 
@@ -25,5 +27,13 @@ export const reqGetHotList = () => {
   return http<HotItem[]>({
     url: '/home/hot/mutli',
     method: 'GET',
+  })
+}
+// 获取猜你喜欢
+export const reqGetHomeGuessLikeList = (data?: PageParams) => {
+  return http<PageResult<GuessItem>>({
+    url: '/home/goods/guessLike',
+    method: 'GET',
+    data,
   })
 }

@@ -1,5 +1,55 @@
 <script setup lang="ts">
-//
+import { reqGetHomeGuessLikeList } from '@/services/home'
+import type { PageParams } from '@/types/global'
+import type { GuessItem } from '@/types/home.d'
+import { onLoad } from '@dcloudio/uni-app'
+import { ref } from 'vue'
+
+// 猜你喜欢列表
+const guessLikeList = ref<GuessItem[]>([])
+// 分页参数(在首页设置为必选项)
+const pageParams = ref<Required<PageParams>>({
+  // 当前页
+  page: 1,
+  // 每页大小
+  pageSize: 10,
+})
+// 总页数
+const pages = ref<number>(parseInt(''))
+
+// 生命周期函数
+onLoad(() => {
+  getHomeGuessLikeList()
+})
+
+// 获取猜你喜欢列表
+const getHomeGuessLikeList = async () => {
+  // 如果当前页超过了总页数,则结束程序
+  if (pageParams.value.page > pages.value) {
+    return uni.showToast({
+      icon: 'none',
+      title: '没有更多数据了哦~',
+    })
+  }
+  const res = await reqGetHomeGuessLikeList(pageParams.value)
+  // guessLikeList为数组,push的值应该为对象,才能正确显示,res.result.items为数组,所以要进行解构
+  guessLikeList.value.push(...res.result.items)
+  // 将总页数传递
+  pages.value = res.result.pages
+  // 当前页数+1,为下一次发请求做准备
+  pageParams.value.page++
+}
+// 重置数据
+const resetData = () => {
+  guessLikeList.value = []
+  pageParams.value.page = 1
+  pages.value = parseInt('')
+}
+// 暴露方法
+defineExpose({
+  getMore: getHomeGuessLikeList,
+  resetData,
+})
 </script>
 
 <template>
@@ -10,23 +60,21 @@
   <view class="guess">
     <navigator
       class="guess-item"
-      v-for="item in 10"
-      :key="item"
-      :url="`/pages/goods/goods?id=4007498`"
+      v-for="item in guessLikeList"
+      :key="item.id"
+      :url="`/pages/goods/goods?id=${item.id}`"
     >
-      <image
-        class="image"
-        mode="aspectFill"
-        src="https://pcapi-xiaotuxian-front-devtest.itheima.net/miniapp/uploads/goods_big_1.jpg"
-      ></image>
-      <view class="name"> 德国THORE男表 超薄手表男士休闲简约夜光石英防水直径40毫米 </view>
+      <image class="image" mode="aspectFill" :src="item.picture"></image>
+      <view class="name">{{ item.name }}</view>
       <view class="price">
         <text class="small">¥</text>
-        <text>899.00</text>
+        <text>{{ item.price }}</text>
       </view>
     </navigator>
   </view>
-  <view class="loading-text"> 正在加载... </view>
+  <view class="loading-text">
+    {{ pageParams.page > pages ? '没有更多数据了哦~' : '正在加载...' }}
+  </view>
 </template>
 
 <style lang="scss">

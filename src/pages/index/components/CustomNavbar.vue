@@ -25,9 +25,9 @@ const { safeAreaInsets } = uni.getSystemInfoSync()
 .navbar {
   background-image: url(@/static/images/navigator_bg.png);
   background-size: cover;
-  position: sticky;
-  top: 0;
-  z-index: 99;
+  // position: sticky;
+  // top: 0;
+  // z-index: 99;
   display: flex;
   flex-direction: column;
   padding-top: 20px;

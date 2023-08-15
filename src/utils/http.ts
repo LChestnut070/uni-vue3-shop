@@ -29,6 +29,13 @@ const httpInterceptor = {
 uni.addInterceptor('request', httpInterceptor)
 uni.addInterceptor('uploadFile', httpInterceptor)
 
+// 定义返回类型
+interface resData<T> {
+  code: string
+  msg: string
+  result: T
+}
+
 // 响应拦截器
 export const http = <T>(options: UniApp.RequestOptions) => {
   return new Promise<resData<T>>((resolve, reject) => {
@@ -65,11 +72,4 @@ export const http = <T>(options: UniApp.RequestOptions) => {
       },
     })
   })
-}
-
-// 定义返回类型
-interface resData<T> {
-  code: string
-  msg: string
-  result: T
 }

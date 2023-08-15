@@ -2,7 +2,7 @@
 import type { BannerItem } from '@/types/home'
 import { ref } from 'vue'
 
-const props = defineProps<{
+defineProps<{
   bannerList: BannerItem[]
 }>()
 
@@ -44,7 +44,7 @@ const changeCurrent: UniHelper.SwiperOnChange = (e) => {
 }
 /* 轮播图 */
 .carousel {
-  height: 100%;
+  height: 280rpx;
   position: relative;
   overflow: hidden;
   transform: translateY(0);
