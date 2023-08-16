@@ -169,7 +169,6 @@ page {
   display: flex;
   justify-content: space-evenly;
   height: 100rpx;
-  width: 95vw;
   line-height: 90rpx;
   margin: 0 20rpx;
   font-size: 28rpx;

@@ -44,7 +44,7 @@ const changeCurrent: UniHelper.SwiperOnChange = (e) => {
 }
 /* 轮播图 */
 .carousel {
-  height: 280rpx;
+  height: 100%;
   position: relative;
   overflow: hidden;
   transform: translateY(0);

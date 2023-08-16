@@ -4,7 +4,7 @@ import type { BannerItem, CategoryItem, HotItem } from '@/types/home'
 import { http } from '@/utils/http'
 
 // 获取首页轮播图
-export const reqGetHomeBannerList = (distributionSite = 1) => {
+export const reqGetHomeBannerList = (distributionSite: number) => {
   return http<BannerItem[]>({
     url: '/home/banner',
     method: 'GET',

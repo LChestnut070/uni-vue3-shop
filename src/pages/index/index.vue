@@ -33,7 +33,7 @@ onLoad(async () => {
 
 // 获取轮播图
 const getHomeBannerList = async () => {
-  const res = await reqGetHomeBannerList()
+  const res = await reqGetHomeBannerList(1)
   bannerList.value = res.result
 }
 // 获取分类导航
@@ -71,7 +71,6 @@ const onRefresherrefresh = async () => {
 <template>
   <!-- 导航栏 -->
   <CustomNavbar />
-
   <scroll-view
     scroll-y
     lower-threshold="300"
