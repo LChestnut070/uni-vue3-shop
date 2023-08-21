@@ -5,8 +5,6 @@ import type { GuessItem } from '@/types/home.d'
 import { onLoad } from '@dcloudio/uni-app'
 import { ref } from 'vue'
 
-// 猜你喜欢列表
-const guessLikeList = ref<GuessItem[]>([])
 // 分页参数(在首页设置为必选项)
 const pageParams = ref<Required<PageParams>>({
   // 当前页
@@ -23,6 +21,7 @@ onLoad(() => {
 })
 
 // 获取猜你喜欢列表
+const guessLikeList = ref<GuessItem[]>([])
 const getHomeGuessLikeList = async () => {
   // 如果当前页超过了总页数,则结束程序
   if (pageParams.value.page > pages.value) {
@@ -32,19 +31,22 @@ const getHomeGuessLikeList = async () => {
     })
   }
   const res = await reqGetHomeGuessLikeList(pageParams.value)
-  // guessLikeList为数组,push的值应该为对象,才能正确显示,res.result.items为数组,所以要进行解构
+  /* guessLikeList为数组,push的值应该为对象,才能正确显示,res.result.items为数组,所以要进行解构 */
+  // 猜你喜欢列表
   guessLikeList.value.push(...res.result.items)
   // 将总页数传递
   pages.value = res.result.pages
   // 当前页数+1,为下一次发请求做准备
   pageParams.value.page++
 }
+
 // 重置数据
 const resetData = () => {
   guessLikeList.value = []
   pageParams.value.page = 1
   pages.value = parseInt('')
 }
+
 // 暴露方法
 defineExpose({
   getMore: getHomeGuessLikeList,

@@ -1,6 +1,4 @@
 <script setup lang="ts">
-// import { uni } from '@dcloudio/uni-h5/'
-
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()
 </script>

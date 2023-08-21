@@ -21,10 +21,6 @@ const query = defineProps<{
 const checkedHot = hotMap.find((item) => {
   return item.type === query.type
 })
-// 热门推荐背景图
-const banner = ref<string>('')
-// 热门推荐子项列表(finish用于控制数据是否完毕状态,loading用于控制加载数据的状态)
-const subTypesList = ref<(SubTypeItem & { finish?: boolean; loading?: boolean })[]>([])
 // 热门推荐被选中的子项
 const checkedType = ref<number>(0)
 
@@ -37,13 +33,16 @@ onLoad(() => {
 })
 
 // 获取热门推荐列表
+/* 热门推荐子项列表(finish用于控制数据是否完毕状态,loading用于控制加载数据的状态) */
+const subTypesList = ref<(SubTypeItem & { finish?: boolean; loading?: boolean })[]>([])
+const banner = ref<string>('')
 const getHotRecommendList = async () => {
   const res = await reqGetHotRecommendList(checkedHot!.url, {
     // 动态区分开发环境与测试环境
     page: import.meta.env ? 33 : 1,
     pageSize: 10,
   })
-  // 背景图
+  // 热门推荐背景图
   banner.value = res.result.bannerPicture
   // 子项列表
   subTypesList.value = res.result.subTypes

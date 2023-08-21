@@ -5,22 +5,14 @@ import HotPanel from './components/HotPanel.vue'
 import Pageskeleton from '@/pages/index/components/Pageskeleton.vue'
 import { reqGetCategoryPanelList, reqGetHomeBannerList, reqGetHotList } from '@/services/home'
 import type { BannerItem, CategoryItem, HotItem } from '@/types/home'
-import type { YlGuessInstance } from '@/components/components'
 import { onLoad } from '@dcloudio/uni-app'
 import { ref } from 'vue'
+import { useGuessList } from '@/composables'
 
-// 轮播图列表
-const bannerList = ref<BannerItem[]>([])
-// 分类列表
-const categoryList = ref<CategoryItem[]>([])
-// 热门列表
-const hotList = ref<HotItem[]>([])
-// 猜你喜欢ref实例
-const guessRef = ref<YlGuessInstance>()
-// 下拉刷新的状态
-const refreshStatus = ref<boolean>(false)
 // 骨架屏显示状态
 const skeletonStatus = ref<boolean>(true)
+// 猜你喜欢组合式函数
+const { guessRef, onScrolltolower } = useGuessList()
 
 // 生命周期函数
 onLoad(async () => {
@@ -32,25 +24,31 @@ onLoad(async () => {
 })
 
 // 获取轮播图
+const bannerList = ref<BannerItem[]>([])
 const getHomeBannerList = async () => {
   const res = await reqGetHomeBannerList(1)
+  // 轮播图列表
   bannerList.value = res.result
 }
+
 // 获取分类导航
+const categoryList = ref<CategoryItem[]>([])
 const getCategoryList = async () => {
   const res = await reqGetCategoryPanelList()
+  // 分类列表
   categoryList.value = res.result
 }
+
 // 获取热门列表
+const hotList = ref<HotItem[]>([])
 const getHotList = async () => {
   const res = await reqGetHotList()
+  // 热门列表
   hotList.value = res.result
 }
-// 页面触底触发的事件
-const onScrolltolower = () => {
-  guessRef.value?.getMore()
-}
+
 // 页面下拉刷新
+const refreshStatus = ref<boolean>(false)
 const onRefresherrefresh = async () => {
   // 开启加载动画
   refreshStatus.value = true

@@ -7,10 +7,6 @@ import type { BannerItem } from '@/types/home'
 import { onLoad } from '@dcloudio/uni-app'
 import { ref } from 'vue'
 
-// 分类顶部轮播图
-const bannerList = ref<BannerItem[]>([])
-// 分类全部数据
-const categoryTopItemList = ref<CategoryTopItem[]>([])
 // 当前一级分类序号
 const categoryTopItemIndex = ref<number>(0)
 // 骨架屏显示状态
@@ -23,11 +19,14 @@ onLoad(async () => {
 })
 
 // 获取分类顶部轮播图
+const bannerList = ref<BannerItem[]>([])
 const getCateBannerList = async () => {
   const res = await reqGetHomeBannerList(2)
   bannerList.value = res.result
 }
+
 // 获取分类数据
+const categoryTopItemList = ref<CategoryTopItem[]>([])
 const getCategoryList = async () => {
   const res = await reqGetCategoryList()
   categoryTopItemList.value = res.result
