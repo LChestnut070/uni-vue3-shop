@@ -1,11 +1,17 @@
 // src/pages/goods/goods.vue
 <script setup lang="ts">
+import type {
+  SkuPopupEvent,
+  SkuPopupInstanceType,
+  SkuPopupLocaldata,
+} from '@/components/vk-data-goods-sku-popup/vk-data-goods-sku-popup'
 import AddressPanel from '@/pages/goods/components/AddressPanel.vue'
 import ServicePanel from '@/pages/goods/components/ServicePanel.vue'
+import { reqAddToCart } from '@/services/cart'
 import { reqGetGoodsInfo } from '@/services/goods'
 import type { GoodsResult } from '@/types/goods'
 import { onLoad } from '@dcloudio/uni-app'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 // 商品id
 const query = defineProps<{
@@ -19,13 +25,37 @@ onLoad(() => {
   getGoodsInfo()
 })
 
-// 获取商品详细信息
+/* 获取商品详细信息 */
 const goodsinfo = ref<GoodsResult>()
+// 商品信息
+const localdata = ref({} as SkuPopupLocaldata)
 const getGoodsInfo = async () => {
   // 发请求
   const res = await reqGetGoodsInfo(query.id)
   goodsinfo.value = res.result
-  console.log(res.result)
+  // 为组件赋值数据
+  localdata.value = {
+    _id: res.result.id,
+    name: res.result.name,
+    goods_thumb: res.result.mainPictures[0],
+    spec_list: res.result.specs.map((item) => {
+      return {
+        name: item.name,
+        list: item.values,
+      }
+    }),
+    sku_list: res.result.skus.map((item) => {
+      return {
+        _id: item.id,
+        goods_id: res.result.id,
+        goods_name: res.result.name,
+        image: item.picture,
+        price: item.price * 100,
+        stock: item.inventory,
+        sku_name_arr: item.specs.map((vv) => vv.valueName),
+      }
+    }),
+  }
 }
 
 // 轮播图变换
@@ -57,6 +87,40 @@ const openPopup = (model: typeof popupName.value) => {
 // 关闭弹出层
 const closePopup = () => {
   popupRef.value?.close()
+}
+
+/* 打开SKU组件 */
+// 控制SKU组件的显示与隐藏
+const isShowSku = ref(false)
+// 按钮模式类型
+enum SkuMode {
+  Both = 1,
+  Cart = 2,
+  Buy = 3,
+}
+// 按钮模式
+const mode = ref<SkuMode>(SkuMode.Cart)
+const onOpenSkuPopup = (value: SkuMode) => {
+  isShowSku.value = true
+  mode.value = value
+}
+
+// sku组件实例
+const skuPopupRef = ref<SkuPopupInstanceType>()
+// 计算被选中的值
+const selectArrText = computed(() => {
+  // selectArr的值为字符串类型数组
+  return skuPopupRef.value?.selectArr?.join(' ').trim() || '请选择商品规格'
+})
+
+// 加入购物车
+const onAddCart = async (e: SkuPopupEvent) => {
+  await reqAddToCart(e._id, e.buy_num)
+  uni.showToast({
+    icon: 'success',
+    title: '添加购物车成功',
+  })
+  isShowSku.value = false
 }
 </script>
 
@@ -94,9 +158,9 @@ const closePopup = () => {
 
       <!-- 操作面板 -->
       <view class="action">
-        <view class="item arrow">
+        <view class="item arrow" @tap="onOpenSkuPopup(SkuMode.Both)">
           <text class="label">选择</text>
-          <text class="text ellipsis"> 请选择商品规格 </text>
+          <text class="text ellipsis"> {{ selectArrText }} </text>
         </view>
         <view class="item arrow" @tap="openPopup('Address')">
           <text class="label">送至</text>
@@ -176,16 +240,32 @@ const closePopup = () => {
       </navigator>
     </view>
     <view class="buttons">
-      <view class="addcart"> 加入购物车 </view>
-      <view class="buynow"> 立即购买 </view>
+      <view class="addcart" @tap="onOpenSkuPopup(SkuMode.Cart)"> 加入购物车 </view>
+      <view class="buynow" @tap="onOpenSkuPopup(SkuMode.Buy)"> 立即购买 </view>
     </view>
   </view>
 
   <!-- 弹出层 -->
   <uni-popup ref="popupRef" type="bottom" background-color="#fff">
     <AddressPanel v-if="popupName === 'Address'" @closePopup="closePopup"></AddressPanel>
-    <servicePanel v-else @closePopup="closePopup"></servicePanel>
+    <ServicePanel v-else @closePopup="closePopup"></ServicePanel>
   </uni-popup>
+
+  <!-- sku弹窗组件 -->
+  <vk-data-goods-sku-popup
+    v-model="isShowSku"
+    :localdata="localdata"
+    :mode="mode"
+    add-cart-background-color="#FFA868"
+    buy-now-background-color="#27BA9B"
+    ref="skuPopupRef"
+    :actived-style="{
+      color: '#27BA9B',
+      borderColor: '#27BA9B',
+      backgroundColor: '#E9F8F5',
+    }"
+    @add-cart="onAddCart"
+  ></vk-data-goods-sku-popup>
 </template>
 
 <style lang="scss">
