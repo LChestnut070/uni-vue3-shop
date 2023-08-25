@@ -122,6 +122,11 @@ const onAddCart = async (e: SkuPopupEvent) => {
   })
   isShowSku.value = false
 }
+
+// 立即购买
+const onButNow = (e: SkuPopupEvent) => {
+  uni.navigateTo({ url: `/pagesOrder/create/create?skuId=${e._id}&count=${e.buy_num}` })
+}
 </script>
 
 <template>
@@ -235,7 +240,7 @@ const onAddCart = async (e: SkuPopupEvent) => {
         <text class="icon-handset"></text>客服
       </button>
       <!-- 购物车 -->
-      <navigator class="icons-button" url="/pages/cart/cart" open-type="switchTab">
+      <navigator class="icons-button" url="/pages/cart/cart2" open-type="navigate">
         <text class="icon-cart"></text>购物车
       </navigator>
     </view>
@@ -265,6 +270,7 @@ const onAddCart = async (e: SkuPopupEvent) => {
       backgroundColor: '#E9F8F5',
     }"
     @add-cart="onAddCart"
+    @buy-now="onButNow"
   ></vk-data-goods-sku-popup>
 </template>
 

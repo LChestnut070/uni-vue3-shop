@@ -44,7 +44,8 @@ const setUserInfo = (profile: LoginResult) => {
   })
   // 页面跳转
   setTimeout(() => {
-    uni.switchTab({ url: '/pages/my/my' })
+    // uni.switchTab({ url: '/pages/my/my' })
+    uni.navigateBack()
   }, 1000)
 }
 </script>

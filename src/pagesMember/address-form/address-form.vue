@@ -20,7 +20,7 @@ const form = ref({
   cityCode: '', // 城市编码(后端参数)
   countyCode: '', // 区/县编码(后端参数)
   address: '', // 详细地址
-  isDefault: 0, // 默认地址，1为是，0为否
+  isDefault: 1, // 默认地址，1为是，0为否
 })
 // 表单验证规则
 const rules: UniHelper.UniFormsRules = {
@@ -61,6 +61,7 @@ const rules: UniHelper.UniFormsRules = {
     ],
   },
 }
+// 表单ref实例
 const formRef = ref<UniHelper.UniFormsInstance>()
 
 // 生命周期函数
@@ -153,7 +154,7 @@ const getAddressInfoById = async () => {
       <!-- 是否设为默认地址 -->
       <view class="form-item">
         <label class="label">设为默认地址</label>
-        <switch class="switch" color="#27ba9b" :checked="true" @change="onSwitchChange" />
+        <switch class="switch" color="#27ba9b" :checked="form.isDefault" @change="onSwitchChange" />
       </view>
     </uni-forms>
   </view>
