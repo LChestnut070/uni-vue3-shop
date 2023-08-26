@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, ref } from 'vue'
 import OrderList from './components/OrderList.vue'
 import type { OrderItem } from '@/types/order'
 import { reqGetOrderList } from '@/services/order'

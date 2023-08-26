@@ -7,8 +7,10 @@ import { ref } from 'vue'
 
 // 生命周期函数
 onLoad(async () => {
+  // #ifdef MP-WEIXIN
   const res = await wx.login()
   code = res.code
+  // #endif
 })
 
 // 获取手机号进行登录(需要企业appid)
@@ -60,11 +62,20 @@ const setUserInfo = (profile: LoginResult) => {
     </view>
     <!-- 登录 -->
     <view class="login">
+      <!-- 网页端 -->
+      <!-- #ifdef H5 -->
+      <input placeholder="请输入用户名/手机号码" class="input" type="text" />
+      <input placeholder="请输入密码" class="input" type="text" password />
+      <button class="button phone">登录</button>
+      <!-- #endif -->
       <!-- 手机号快捷登录 -->
+      <!-- #ifdef MP-WEIXIN -->
       <button class="button phone" open-type="getPhoneNumber" @getphonenumber="onGetphonenumber">
         <text class="icon icon-phone"></text>
         手机号快捷登录
       </button>
+      <!-- #endif -->
+
       <!-- 模拟快捷登录 -->
       <view class="extra">
         <view class="caption">

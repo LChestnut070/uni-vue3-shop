@@ -3,7 +3,7 @@ import { reqGetHomeGuessLikeList } from '@/services/home'
 import type { PageParams } from '@/types/global'
 import type { GuessItem } from '@/types/home.d'
 import { onLoad } from '@dcloudio/uni-app'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 
 // 分页参数(在首页设置为必选项)
 const pageParams = ref<Required<PageParams>>({
@@ -16,7 +16,7 @@ const pageParams = ref<Required<PageParams>>({
 const pages = ref<number>(parseInt(''))
 
 // 生命周期函数
-onLoad(() => {
+onMounted(() => {
   getHomeGuessLikeList()
 })
 
